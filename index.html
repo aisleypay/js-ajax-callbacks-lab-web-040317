@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
   <head>
     <title>Ajax Lab</title>
 
@@ -9,21 +10,59 @@
         display: -webkit-flex;
         display: flex;
       }
-      .flexbox-container > div {
+
+      .flexbox-container>div {
         width: 50%;
         padding: 10px;
       }
-      .flexbox-container > div:first-child {
+
+      .flexbox-container>div:first-child {
         margin-right: 20px;
       }
     </style>
   </head>
+
   <body>
     <main id="main">
-      <div id="errors"></div>
     </main>
     <div class="flexbox-container">
       <div>
+        <div id="errors"></div>
+        Search: <input type="text" id="searchTerms">
+        <a href="#" id="searchTerms" onclick="searchRepositories()">Search Repositories</a>
+
+        <script id="repository-template" type="text/x-handlebars-template">
+          <ul>
+            {{#each this}}
+            <li>
+              <h2> <a href="{{ html_url }}">{{ name }}</a></h2>
+              <p><a href="#" data-repository="{{ name }}" data-owner="{{ owner.login }}" onclick="showCommits(this)">Show Commits</a></p>
+              <h2>Description: {{ description }}</h2> {{>userDetails owner}}
+            </li>
+            {{/each}}
+          </ul>
+        </script>
+
+        <script id="user-details-partial" type="text/x-handlebars-template">
+          <section>
+            <h2>{{login}}</h2>
+            <h2><img src="{{ avatar_url }} " alt="avatar image"></h2>
+            <h2><a href="{{ url }}">Link</a></h2>
+          </section>
+        </script>
+
+        <script id="commits-template" type="text/x-handlebars-template">
+          <ul>
+            {{#each this}}
+            <li>
+              <h3>{{ sha }}</h3>
+              <p> {{ commit.message }} </p>
+              <div> {{> userDetails author }} </div>
+            </li>
+            {{/each }}
+          </ul>
+        </script>
+
         <h3>Repositories</h3>
         <div id="results"></div>
       </div>
@@ -36,4 +75,5 @@
     <script src="handlebars.js"></script>
     <script src="index.js"></script>
   </body>
+
 </html>
